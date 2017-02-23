@@ -1,7 +1,7 @@
 Orangedisc = {}
 Orangediscs_controller = {}
 Orangediscs_controller.discs = {}
-Orangediscs_controller.disc = love.graphics.newImage("images/orange13-5.png")
+Orangediscs_controller.disc = love.graphics.newImage("images/orange.png")
 
 
 

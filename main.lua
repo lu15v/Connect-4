@@ -10,7 +10,10 @@ function love.load()
   printy = 0
 
   Reddiscs_controller:spawnReddisc(0,0)
+  Reddiscs_controller:spawnReddisc(0,0)
   Orangediscs_controller:spawnOrangedisc(0,0)
+  Orangediscs_controller:spawnOrangedisc(0,0)
+
 end
 
 
@@ -21,8 +24,10 @@ end
 
 
 function love.draw()
-  love.graphics.draw(Orangediscs_controller.disc, 95,0,0)
   love.graphics.draw(Reddiscs_controller.disc, 15,5,0)
+  love.graphics.draw(Orangediscs_controller.disc, 105,5,0)
+  love.graphics.draw(Reddiscs_controller.disc, 195,5,0)
+  love.graphics.draw(Orangediscs_controller.disc, 285,5,0)
   love.graphics.print("Text", printx, printy)
 
 
@@ -38,7 +43,7 @@ end
 
 
 function love.mousepressed(x, y, button, istouch)
-  if button == 1 then -- Versions prior to 0.10.0 use the MouseConstant 'l'
+  if button == 1 then
      printx = x
      printy = y
   end
