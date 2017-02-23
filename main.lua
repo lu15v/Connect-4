@@ -8,6 +8,11 @@ local heigth = 880
 local column_size = width/11
 columns = {}
 x_possitions = {}
+is_red_turn = false
+is_orange_turn = false
+
+discs = {}
+
 
 function love.load()
   love.window.setMode(width, heigth, {resizable=true, vsync=false, minwidth=400, minheight=300})
@@ -26,7 +31,16 @@ function love.load()
   Reddiscs_controller:spawnReddisc(0,0)
   Orangediscs_controller:spawnOrangedisc(0,0)
 
+  --for selecting what color begins with the game
+  math.randomseed(os.time())
+  turn = math.random(1, 100)
 
+
+  if turn > 50 then
+    is_red_turn = true
+  else
+    is_orange_turn = true
+  end
 end
 
 
@@ -43,10 +57,13 @@ function love.draw()
   --love.graphics.draw(Orangediscs_controller.disc, 285,5,0)
   --love.graphics.print("Text", printx, printy)
 
-  for i, v in ipairs(x_possitions) do
-    love.graphics.draw(Reddiscs_controller.disc,v -75, 5, 0)
+--  for i, v in ipairs(x_possitions) do
+--    love.graphics.draw(Reddiscs_controller.disc,v -74, 5, 0)
+--    love.graphics.draw(Orangediscs_controller.disc,v -74, 5, 0)
+--  end
+  for i = 1, table.getn(discs), 3 do
+    love.graphics.draw(discs[i], discs[i + 1], discs[i + 2], 0)
   end
-
 
   ---for background image
   for i = 0, love.graphics.getWidth() / background:getWidth() do
@@ -63,8 +80,21 @@ function love.mousepressed(x, y, button, istouch)
     for i, v in ipairs(columns) do
       if x < v then
         table.insert(x_possitions, math.floor(v))
-        table.insert(Reddiscs_controller.discs, Reddisc)
-        print(table.getn(Reddiscs_controller.discs))
+        if is_red_turn then
+        --  table.insert(Reddiscs_controller.discs, Reddisc)
+          table.insert(discs, Reddiscs_controller.disc)
+          table.insert(discs, v- 74)
+          table.insert(discs, 5)
+          is_red_turn = false
+          is_orange_turn = true
+        else
+        --  table.insert(Orangediscs_controller.discs, Orangedisc)
+          table.insert(discs, Orangediscs_controller.disc)
+          table.insert(discs, v- 74)
+          table.insert(discs, 5)
+          is_orange_turn = false
+          is_red_turn = true
+        end
         break
       end
     end
