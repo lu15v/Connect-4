@@ -10,5 +10,5 @@ function Orangediscs_controller:spawnOrangedisc(x, y)
   Orangedisc.y = y
   Orangedisc.width = self.disc:getWidth()
   Orangedisc.heigth = self.disc:getHeight()
-  table.insert(self.discs, Orangedisc)
+--  table.insert(self.discs, Orangedisc)
 end
