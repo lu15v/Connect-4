@@ -1,7 +1,7 @@
 Reddisc = {}
 Reddiscs_controller = {}
 Reddiscs_controller.discs = {}
-Reddiscs_controller.disc = love.graphics.newImage("images/red.png")
+Reddiscs_controller.disc = love.graphics.newImage("images/red10.png")
 
 
 
