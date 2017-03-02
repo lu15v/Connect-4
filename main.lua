@@ -115,12 +115,20 @@ end
 function check_winner(matrix, n)
   for i=1,n do
     for j=1,n -1 do
+      --horizontal validation
       if matrix[i][j] == matrix[i][j +1] and matrix[i][j] ~= "." then
         count_h = count_h + 1
       else
        count_h = 1
       end
-      if count_h == 4 then
+      --vertical validation
+      if matrix[j][i] == matrix [j +1][i] and matrix[j][i] ~= "." then
+        count_v = count_v + 1
+      else
+        count_v = 1
+      end
+
+      if count_h == 4 or count_v == 4 then
         if is_orange_turn == false then
           print("orange wins!!!")
         else
