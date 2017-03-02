@@ -99,32 +99,40 @@ function love.mousepressed(x, y, button, istouch)
         table.insert(discs, v - separation[i])
         table.insert(discs, y_positions[mc[i]])
         mc[i] = mc[i] - 1
-        printMatrix(md)
+        displayTerminalGame(md, columns_n)
         break
       end
     end
   end
 end
 
-function printMatrix(matrix)
-  for i=1,columns_n do
+function printMatrix(matrix, n)
+  for i=1,n do
     print()
-    for j=1,columns_n do
+    for j=1,n do
       printf(" %s ",matrix[i][j])
     end
     print()
   end
-  printf("\n-------\n")
+  printf("\n---------------------\n")
 end
 
+function displayTerminalGame(matrix, n)
+  if is_red_turn then
+    print("It's Red's turn")
+  else
+    print("It's Orange's turn")
+  end
+  printMatrix(matrix, n)
+end
 
 printf = function(s,...)
            return io.write(s:format(...))
          end -- function
 
-function check_winner()
-  for i =1, columns_n do
-    for j=1, columns_n do
+function check_winner(matrix, n)
+  for i =1, n do
+    for j=1, n do
     end
   end
 end
