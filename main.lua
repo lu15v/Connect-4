@@ -18,7 +18,9 @@ discs = {}
 --matrix of the discs
 md = {}
 
+--counters for every column
 mc = {}
+
 
 function love.load()
   love.window.setMode(width, heigth, {resizable=true, vsync=false, minwidth=400, minheight=300})
@@ -54,7 +56,7 @@ function love.load()
     end
   end
 
-  --counters for elements possitions
+  --counters for elements positions
 
   for i = 1, columns_n do
     mc[i] = 7
@@ -80,6 +82,7 @@ end
 function love.mousepressed(x, y, button, istouch)
   if button == 1 then
     separation = {77, 81, 85, 88, 91, 94, 97}
+    y_positions = {5, 85, 165, 245, 325, 405, 485}
     for i, v in ipairs(columns) do
       if x < v then
         if is_red_turn then
@@ -94,7 +97,7 @@ function love.mousepressed(x, y, button, istouch)
           md[mc[i]][i] = orange_symbol
         end
         table.insert(discs, v - separation[i])
-        table.insert(discs, 5)
+        table.insert(discs, y_positions[mc[i]])
         mc[i] = mc[i] - 1
         printMatrix()
         break
