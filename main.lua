@@ -10,8 +10,6 @@ columns = {}
 is_red_turn = false
 is_orange_turn = false
 
-local red_symbol = "O"
-local orange_symbol = "X"
 --Save the positions of the discs
 discs = {}
 
@@ -44,8 +42,10 @@ function love.load()
   turn = math.random(1, 100)
   if turn > 50 then
     is_red_turn = true
+    current_symbol = "O"
   else
     is_orange_turn = true
+    current_symbol = "X"
   end
 
   --creating the matrix
@@ -65,7 +65,11 @@ end
 
 
 function love.update(dt)
-
+  if is_red_turn then
+    current_symbol = "O"
+  else
+    current_symbol = "X"
+  end
 end
 
 
@@ -89,22 +93,45 @@ function love.mousepressed(x, y, button, istouch)
           table.insert(discs, Reddiscs_controller.disc)
           is_red_turn = false
           is_orange_turn = true
-          md[mc[i]][i] = red_symbol
         else
           table.insert(discs, Orangediscs_controller.disc)
           is_orange_turn = false
           is_red_turn = true
-          md[mc[i]][i] = orange_symbol
         end
         table.insert(discs, v - separation[i])
         table.insert(discs, y_positions[mc[i]])
+        md[mc[i]][i] = current_symbol
         mc[i] = mc[i] - 1
+        check_winner(md, columns_n)
         displayTerminalGame(md, columns_n)
         break
       end
     end
   end
 end
+
+  count_h = 1
+  count_v = 1
+function check_winner(matrix, n)
+  for i=1,n do
+    for j=1,n -1 do
+      if matrix[i][j] == matrix[i][j +1] and matrix[i][j] ~= "." then
+        count_h = count_h + 1
+      else
+       count_h = 1
+      end
+      if count_h == 4 then
+        if is_orange_turn == false then
+          print("orange wins!!!")
+        else
+          print("red wins!!!")
+        end
+        break
+      end
+    end
+  end
+end
+
 
 function printMatrix(matrix, n)
   for i=1,n do
@@ -130,12 +157,6 @@ printf = function(s,...)
            return io.write(s:format(...))
          end -- function
 
-function check_winner(matrix, n)
-  for i =1, n do
-    for j=1, n do
-    end
-  end
-end
 
 function draw_background(background)
  ---for background image
