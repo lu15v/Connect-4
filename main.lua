@@ -52,7 +52,7 @@ function love.load()
   for i=1,columns_n do
     md[i] = {}
     for j=1,columns_n do
-      md[i][j] = 0
+      md[i][j] = "."
     end
   end
 
@@ -99,19 +99,20 @@ function love.mousepressed(x, y, button, istouch)
         table.insert(discs, v - separation[i])
         table.insert(discs, y_positions[mc[i]])
         mc[i] = mc[i] - 1
-        printMatrix()
+        printMatrix(md)
         break
       end
     end
   end
 end
 
-function printMatrix()
+function printMatrix(matrix)
   for i=1,columns_n do
-    printf("\n")
+    print()
     for j=1,columns_n do
-      printf("%s",md[i][j])
+      printf(" %s ",matrix[i][j])
     end
+    print()
   end
   printf("\n-------\n")
 end
@@ -121,6 +122,12 @@ printf = function(s,...)
            return io.write(s:format(...))
          end -- function
 
+function check_winner()
+  for i =1, columns_n do
+    for j=1, columns_n do
+    end
+  end
+end
 
 function draw_background(background)
  ---for background image
