@@ -154,6 +154,7 @@ function check_winner(matrix, n)
     else
       print("red wins!!")
     end
+    love.event.quit()
   end
 
 end
