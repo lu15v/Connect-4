@@ -1,4 +1,5 @@
 
+
 require("redDisc")
 require("orangeDisc")
 
@@ -101,7 +102,6 @@ function love.mousepressed(x, y, button, istouch)
         table.insert(discs, v - separation[i])
         table.insert(discs, y_positions[mc[i]])
         md[mc[i]][i] = current_symbol
-       printf("%d, %d \n", mc[i], i)
         mc[i] = mc[i] - 1
         check_winner(md, columns_n)
         displayTerminalGame(md, columns_n)
@@ -111,33 +111,19 @@ function love.mousepressed(x, y, button, istouch)
   end
 end
 
-local count_h = 1
-local count_v = 1
+
 local win = false
 
 function check_winner(matrix, n)
-  for i=1,n do
-    for j=1,n -1 do
-      --horizontal validation
-      if matrix[i][j] == matrix[i][j +1] and matrix[i][j] ~= "." then
-        count_h = count_h + 1
-      else
-       count_h = 1
-      end
-      --vertical validation
-      if matrix[j][i] == matrix [j +1][i] and matrix[j][i] ~= "." then
-        count_v = count_v + 1
-      else
-        count_v = 1
-      end
-      if count_h == 4 or count_v == 4  or count_v == 4 then
-        if is_orange_turn == false then
-          print("orange wins!!!")
-        else
-          print("red wins!!!")
+  --vertical & horizontal validation
+  for i=1, n - 3 do
+    for j=1, n do
+        if matrix[i][j] == matrix[i + 1][j] and matrix[i][j] == matrix[i + 2][j] and matrix[i][j] == matrix[i + 3][j]   and matrix[i][j] ~= "." then
+          win = true
         end
-        break
-      end
+        if matrix[j][i] == matrix[j][i + 1 ] and matrix[j][i] == matrix[j][i + 2] and matrix[j][i] == matrix[j][i + 3]   and matrix[j][i] ~= "." then
+          win = true
+        end
     end
   end
   --diagonal validation n
@@ -154,7 +140,7 @@ function check_winner(matrix, n)
   --diagonal validation p
 
   for i = 4, n do
-    for j=1, n -4 do
+    for j=1, n -3 do
       if matrix[i][j] == matrix[i - 1][j + 1] and matrix[i][j] == matrix[i - 2][j + 2]  and matrix[i][j] == matrix[i - 3][j + 3] and matrix[i][j] ~= "." then
         win = true
         break
