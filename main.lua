@@ -1,5 +1,4 @@
 
-
 require("redDisc")
 require("orangeDisc")
 
@@ -71,6 +70,7 @@ function love.update(dt)
   else
     current_symbol = "X"
   end
+  check_winner(md, columns_n)
 end
 
 
@@ -90,7 +90,7 @@ function love.mousepressed(x, y, button, istouch)
     y_positions = {5, 85, 165, 245, 325, 405, 485}
     for i, v in ipairs(columns) do
       if x < v then
-        if is_red_turn then
+        if is_red_turn  then
           table.insert(discs, Reddiscs_controller.disc)
           is_red_turn = false
           is_orange_turn = true
@@ -99,13 +99,16 @@ function love.mousepressed(x, y, button, istouch)
           is_orange_turn = false
           is_red_turn = true
         end
-        table.insert(discs, v - separation[i])
-        table.insert(discs, y_positions[mc[i]])
-        md[mc[i]][i] = current_symbol
-        mc[i] = mc[i] - 1
-        check_winner(md, columns_n)
-        displayTerminalGame(md, columns_n)
-        break
+        if mc[i] > 0 then
+          table.insert(discs, v - separation[i])
+          table.insert(discs, y_positions[mc[i]])
+          md[mc[i]][i] = current_symbol
+          mc[i] = mc[i] - 1
+          displayTerminalGame(md, columns_n)
+          break
+        else
+          print("you can't put a disc in that column")
+        end
       end
     end
   end
@@ -159,6 +162,13 @@ function check_winner(matrix, n)
 
 end
 
+
+function randomMachinePlaying()
+--que escoga aleatoriamente un numero de x
+--validar que en efecto tome turno
+--validar lo de las fichas a tirar.
+
+end
 
 function printMatrix(matrix, n)
   for i=1,n do
