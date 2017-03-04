@@ -96,7 +96,7 @@ function gameLogic(x)
   separation = {77, 81, 85, 88, 91, 94, 97}
   y_positions = {5, 85, 165, 245, 325, 405, 485}
   for i, v in ipairs(columns) do
-    if x < v then
+    if x < v and mc[i] > 0 then
       if is_red_turn  then
         table.insert(discs, Reddiscs_controller.disc)
         is_red_turn = false
@@ -108,16 +108,14 @@ function gameLogic(x)
         current_symbol = "X"
         is_red_turn = true
       end
-      if mc[i] > 0 then
-        table.insert(discs, v - separation[i])
-        table.insert(discs, y_positions[mc[i]])
-        md[mc[i]][i] = current_symbol
-        mc[i] = mc[i] - 1
-        displayTerminalGame(md, columns_n)
-        break
-      else
-        print("you can't put a disc in that column")
-      end
+      table.insert(discs, v - separation[i])
+      table.insert(discs, y_positions[mc[i]])
+      md[mc[i]][i] = current_symbol
+      mc[i] = mc[i] - 1
+      displayTerminalGame(md, columns_n)
+      break
+    elseif mc[i] <= 0 then
+      printf("you can't insert another disc in the column %d\n", i)
     end
   end
 end
