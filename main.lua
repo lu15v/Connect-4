@@ -1,6 +1,7 @@
 
 require("redDisc")
 require("orangeDisc")
+require("cron")
 
 local width = 650
 local heigth = 560
@@ -65,11 +66,6 @@ end
 
 
 function love.update(dt)
-  if is_red_turn then
-    current_symbol = "O"
-  else
-    current_symbol = "X"
-  end
   check_winner(md, columns_n)
 end
 
@@ -77,43 +73,50 @@ end
 function love.draw()
 
 --draw the discs
-  for i = 1, table.getn(discs), 3 do
-    love.graphics.draw(discs[i], discs[i + 1], discs[i + 2], 0)
-  end
+    for i = 1, table.getn(discs), 3 do
+      love.graphics.draw(discs[i], discs[i + 1], discs[i + 2], 0)
+    end
 
   draw_background(background)
 end
 
 function love.mousepressed(x, y, button, istouch)
   if button == 1 then
-    separation = {77, 81, 85, 88, 91, 94, 97}
-    y_positions = {5, 85, 165, 245, 325, 405, 485}
-    for i, v in ipairs(columns) do
-      if x < v then
-        if is_red_turn  then
-          table.insert(discs, Reddiscs_controller.disc)
-          is_red_turn = false
-          is_orange_turn = true
-        else
-          table.insert(discs, Orangediscs_controller.disc)
-          is_orange_turn = false
-          is_red_turn = true
-        end
-        if mc[i] > 0 then
-          table.insert(discs, v - separation[i])
-          table.insert(discs, y_positions[mc[i]])
-          md[mc[i]][i] = current_symbol
-          mc[i] = mc[i] - 1
-          displayTerminalGame(md, columns_n)
-          break
-        else
-          print("you can't put a disc in that column")
-        end
+    gameLogic(x)
+    print("thinking........")
+    gameLogic(randomMachinePlaying())
+  end
+end
+
+function gameLogic(x)
+  separation = {77, 81, 85, 88, 91, 94, 97}
+  y_positions = {5, 85, 165, 245, 325, 405, 485}
+  for i, v in ipairs(columns) do
+    if x < v then
+      if is_red_turn  then
+        table.insert(discs, Reddiscs_controller.disc)
+        is_red_turn = false
+        current_symbol = "O"
+        is_orange_turn = true
+      else
+        table.insert(discs, Orangediscs_controller.disc)
+        is_orange_turn = false
+        current_symbol = "X"
+        is_red_turn = true
+      end
+      if mc[i] > 0 then
+        table.insert(discs, v - separation[i])
+        table.insert(discs, y_positions[mc[i]])
+        md[mc[i]][i] = current_symbol
+        mc[i] = mc[i] - 1
+        displayTerminalGame(md, columns_n)
+        break
+      else
+        print("you can't put a disc in that column")
       end
     end
   end
 end
-
 
 local win = false
 
@@ -164,10 +167,8 @@ end
 
 
 function randomMachinePlaying()
---que escoga aleatoriamente un numero de x
---validar que en efecto tome turno
---validar lo de las fichas a tirar.
-
+  math.randomseed(os.time())
+  return math.random(4, 600)
 end
 
 function printMatrix(matrix, n)
