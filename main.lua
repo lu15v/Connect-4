@@ -84,7 +84,11 @@ function love.mousepressed(x, y, button, istouch)
   if button == 1 then
     gameLogic(x)
     print("thinking........")
-    gameLogic(randomMachinePlaying())
+    local start = os.clock()
+
+    if os.clock() - start < 2 then
+      gameLogic(randomMachinePlaying())
+    end
   end
 end
 
@@ -155,10 +159,10 @@ function check_winner(matrix, n)
   end
 
   if win == true then
-    if is_orange_turn == false then
+    if current_symbol == "O" then
       print("orange wins!!")
     else
-      print("red wins!!")
+      print("red wins!!!")
     end
     love.event.quit()
   end
