@@ -20,7 +20,9 @@ md = {}
 --counters for every column
 mc = {}
 
+-- valid elements of the game
 
+current_symbol = {"X", "O"}
 function love.load()
   love.window.setMode(width, heigth, {resizable=true, vsync=false, minwidth=400, minheight=300})
   love.graphics.setBackgroundColor(44, 110, 225)
@@ -43,10 +45,10 @@ function love.load()
   turn = math.random(1, 100)
   if turn > 50 then
     is_red_turn = true
-    current_symbol = "O"
+    symbol = current_symbol[2]
   else
     is_orange_turn = true
-    current_symbol = "X"
+    symbol =  current_symbol[1]
   end
 
   --creating the matrix
@@ -84,11 +86,9 @@ function love.mousepressed(x, y, button, istouch)
   if button == 1 then
     gameLogic(x)
     print("thinking........")
-    local start = os.clock()
+   ---gameLogic(randomMachinePlaying())
+    gameLogic(simulateAnnealing())
 
-    if os.clock() - start < 2 then
-      gameLogic(randomMachinePlaying())
-    end
   end
 end
 
@@ -100,17 +100,17 @@ function gameLogic(x)
       if is_red_turn  then
         table.insert(discs, Reddiscs_controller.disc)
         is_red_turn = false
-        current_symbol = "O"
+         symbol = current_symbol[2]
         is_orange_turn = true
       else
         table.insert(discs, Orangediscs_controller.disc)
         is_orange_turn = false
-        current_symbol = "X"
+        symbol = current_symbol[1]
         is_red_turn = true
       end
       table.insert(discs, v - separation[i])
       table.insert(discs, y_positions[mc[i]])
-      md[mc[i]][i] = current_symbol
+      md[mc[i]][i] = symbol
       mc[i] = mc[i] - 1
       displayTerminalGame(md, columns_n)
       break
@@ -121,15 +121,27 @@ function gameLogic(x)
 end
 
 local win = false
+local red_win = false
+local orange_win = false
 
 function check_winner(matrix, n)
   --vertical & horizontal validation
   for i=1, n - 3 do
     for j=1, n do
-        if matrix[i][j] == matrix[i + 1][j] and matrix[i][j] == matrix[i + 2][j] and matrix[i][j] == matrix[i + 3][j]   and matrix[i][j] ~= "." then
+        if matrix[i][j] == matrix[i + 1][j] and matrix[i][j] == matrix[i + 2][j] and matrix[i][j] == matrix[i + 3][j]   and matrix[i][j] ~= "."  then
+          if matrix[i][j] == current_symbol[1] then
+            orange_win = true
+          else
+            red_win = true
+          end
           win = true
         end
         if matrix[j][i] == matrix[j][i + 1 ] and matrix[j][i] == matrix[j][i + 2] and matrix[j][i] == matrix[j][i + 3]   and matrix[j][i] ~= "." then
+          if matrix[i][j] == current_symbol[1] then
+            orange_win = true
+          else
+            red_win = true
+          end
           win = true
         end
     end
@@ -139,6 +151,11 @@ function check_winner(matrix, n)
   for i=4, n do
     for j=4, n do
       if matrix[i][j] == matrix[i -1][j -1]  and matrix[i][j]  == matrix[i -2][j -2] and matrix[i][j] == matrix[i -3][j - 3] and matrix[i][j] ~= "."  then
+        if matrix[i][j] == current_symbol[1] then
+          orange_win = true
+        else
+          red_win = true
+        end
         win = true
         break
       end
@@ -150,6 +167,11 @@ function check_winner(matrix, n)
   for i = 4, n do
     for j=1, n -3 do
       if matrix[i][j] == matrix[i - 1][j + 1] and matrix[i][j] == matrix[i - 2][j + 2]  and matrix[i][j] == matrix[i - 3][j + 3] and matrix[i][j] ~= "." then
+        if matrix[i][j] == current_symbol[1] then
+          orange_win = true
+        else
+          red_win = true
+        end
         win = true
         break
       end
@@ -157,20 +179,48 @@ function check_winner(matrix, n)
   end
 
   if win == true then
-    if current_symbol == "O" then
-      print("orange wins!!")
+    if red_win then
+    print("the Red discs won the game")
     else
-      print("red wins!!!")
+      print("the Orange discs won the game")
     end
     love.event.quit()
   end
-
 end
 
 
 function randomMachinePlaying()
   math.randomseed(os.time())
   return math.random(4, 600)
+end
+
+local first_element = true
+
+function simulateAnnealing()
+  local op_sol = {}
+
+  op_sol = heuristic_closer_node()
+
+
+
+  return table.remove(op_sol, 1)
+
+end
+
+
+function heuristic_closer_node()
+  local pos = {17, 109, 199, 293, 378, 468, 558}
+  local solution = {}
+
+  math.randomseed(os.time())
+  local election = math.random(1, 4)
+
+  for i = 1, 4 do
+    solution[i] = pos[election]
+    election = election + 1
+  end
+
+  return solution
 end
 
 function printMatrix(matrix, n)
