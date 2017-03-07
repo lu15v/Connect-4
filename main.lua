@@ -7,6 +7,7 @@ local width = 650
 local heigth = 560
 local columns_n = 7
 local column_size = width/columns_n
+local choice = 0
 columns = {}
 is_red_turn = false
 is_orange_turn = false
@@ -64,6 +65,15 @@ function love.load()
   for i = 1, columns_n do
     mc[i] = 7
   end
+
+repeat
+  io.write("What kind of AI do you want to use? \n")
+  io.write("Press 1 for the informed search \n")
+  io.write("Press 2 for the Uninformed search \n")
+  io.flush()
+  choice = io.read()
+until choice == "1" or choice == "2"
+
 end
 
 
@@ -87,8 +97,12 @@ function love.mousepressed(x, y, button, istouch)
   if button == 1 then
     gameLogic(x)
     print("thinking........")
-  --  gameLogic(randomMachinePlaying())
-    gameLogic(simulateAnnealing())
+    if choice == "1" then
+      gameLogic(simulateAnnealing())
+    else
+      gameLogic(randomMachinePlaying())
+    end
+
 
   end
 end
