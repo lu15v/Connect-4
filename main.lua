@@ -69,6 +69,7 @@ end
 
 function love.update(dt)
   check_winner(md, columns_n)
+  tie()
 end
 
 
@@ -124,6 +125,18 @@ local win = false
 local red_win = false
 local orange_win = false
 
+function tie()
+  for i, v in pairs(mc) do
+    if v == 0 then
+      if i == 7 then
+        print("It's a tie, nobody won the game")
+        love.game.quit()
+      end
+    else
+      break
+    end
+  end
+end
 function check_winner(matrix, n)
   --vertical & horizontal validation
   for i=1, n - 3 do
