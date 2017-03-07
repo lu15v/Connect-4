@@ -86,7 +86,7 @@ function love.mousepressed(x, y, button, istouch)
   if button == 1 then
     gameLogic(x)
     print("thinking........")
-   ---gameLogic(randomMachinePlaying())
+  --  gameLogic(randomMachinePlaying())
     gameLogic(simulateAnnealing())
 
   end
@@ -196,12 +196,19 @@ end
 
 local first_element = true
 
+local op_sol = {}
+local prueba = true
+
 function simulateAnnealing()
-  local op_sol = {}
 
-  op_sol = heuristic_closer_node()
+  if win == false and table.getn(op_sol) == 0  then
+    prueba = true
+  end
 
-
+  if prueba then
+    op_sol = heuristic_closer_node()
+    prueba = false
+  end
 
   return table.remove(op_sol, 1)
 
@@ -221,6 +228,11 @@ function heuristic_closer_node()
   end
 
   return solution
+end
+
+function heuristic_blocking_node()
+
+
 end
 
 function printMatrix(matrix, n)
