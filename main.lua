@@ -230,10 +230,6 @@ function heuristic_closer_node()
   return solution
 end
 
-function heuristic_blocking_node()
-
-
-end
 
 function printMatrix(matrix, n)
   for i=1,n do
